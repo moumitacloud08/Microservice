@@ -1,30 +1,15 @@
 ##Docker Commands
--Open PowerShell
--docker --version
--docker container run -d -p 5000:5000 in28min/hello-world-python:0.0.1.RELEASE
--docker container ls
--docker container stop {containerId}
--docker container run -d -p 5000:5000 in28min/hello-world-java:0.0.1.RELEASE
--docker container run -d -p 5000:5000 in28min/hello-world-nodejs:0.0.1.RELEASE
 
--docker build -t in28min/hello-world-docker:v1 .
--docker container run -d -p 5000:5000 in28min/hello-world-docker:v3
+Open PowerShell
+docker --version
+docker container run -d -p 5000:5000 in28min/hello-world-python:0.0.1.RELEASE
+docker container ls
+docker container stop {containerId}
+docker container run -d -p 5000:5000 in28min/hello-world-java:0.0.1.RELEASE
+docker container run -d -p 5000:5000 in28min/hello-world-nodejs:0.0.1.RELEASE
 
-
------------Other commands--------------------
-
-
-
-wsl -d Ubuntu
-sudo apt update
-docker version
-docker info
-cd /mnt/c/workspace/17-11-2024/SpringFramework/springboot-currency-microservice/spring-hello-world-java-service
-mvn clean package spring-boot:build-image
-
-docker run -d -p 9411:9411 openzipkin/zipkin:2.23
-docker run -d -p 9411:9411 openzipkin/zipkin:latest
-
+#delete all the containers
+docker rm -f (docker ps -aq)
 
 
 ##########=========================Dockerfile - 1 - Creating Docker Images=========================##########
@@ -33,6 +18,10 @@ COPY target/*.jar app.jar
 EXPOSE 5000
 ENTRYPOINT ["java","-jar","/app.jar"]
 
+docker container ls
+docker build -t in28min/hello-world-docker:v1 .
+docker image list
+docker container run -d -p 5000:5000 in28min/hello-world-docker:v1
 
 
 
@@ -49,7 +38,6 @@ FROM eclipse-temurin:21-jre-alpine
 EXPOSE 5000
 COPY --from=build /home/app/target/*.jar app.jar
 ENTRYPOINT [ "sh", "-c", "java -jar /app.jar" ]
-
 
 
 
@@ -162,3 +150,18 @@ EXPOSE 5000
 COPY --from=build /home/app/spring-hello-world-java-service/target/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+
+
+
+-----------Other commands--------------------
+
+
+wsl -d Ubuntu
+sudo apt update
+docker version
+docker info
+cd /mnt/c/workspace/17-11-2024/SpringFramework/springboot-currency-microservice/spring-hello-world-java-service
+mvn clean package spring-boot:build-image
+
+docker run -d -p 9411:9411 openzipkin/zipkin:2.23
+docker run -d -p 9411:9411 openzipkin/zipkin:latest
