@@ -11,6 +11,9 @@ docker container run -d -p 5000:5000 in28min/hello-world-nodejs:0.0.1.RELEASE
 #delete all the containers
 docker rm -f (docker ps -aq)
 
+#list all containers including stopped
+docker ps -a
+
 
 ##########=========================Dockerfile - 1 - Creating Docker Images=========================##########
 FROM eclipse-temurin:21-jre-alpine
@@ -29,7 +32,7 @@ docker container run -d -p 5000:5000 in28min/hello-world-docker:v1
 
 
 ##====================Single Module Project=======================##
-FROM maven:3.8.6-openjdk-18-slim AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /home/app
 COPY . /home/app
 RUN mvn -f /home/app/pom.xml clean package
@@ -38,6 +41,12 @@ FROM eclipse-temurin:21-jre-alpine
 EXPOSE 5000
 COPY --from=build /home/app/target/*.jar app.jar
 ENTRYPOINT [ "sh", "-c", "java -jar /app.jar" ]
+
+
+docker container ls
+docker build -t in28min/hello-world-docker:v2 .
+docker image list
+docker container run -d -p 5000:5000 in28min/hello-world-docker:v2
 
 
 
