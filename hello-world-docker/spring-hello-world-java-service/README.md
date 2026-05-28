@@ -89,21 +89,32 @@ docker build -f spring-hello-world-java-service/Dockerfile -t in28min/hello-worl
 
 
 ##====================Single Module Project======================##
-FROM maven:3.8.6-openjdk-18-slim AS build
+FROM maven:3.9.6-eclipse-temurin-21 AS build
 WORKDIR /home/app
 
 COPY ./pom.xml /home/app/pom.xml
-COPY ./src/main/java/com/in28minutes/rest/webservices/restfulwebservices/RestfulWebServicesApplication.java	/home/app/src/main/java/com/in28minutes/rest/webservices/restfulwebservices/RestfulWebServicesApplication.java
+COPY ./src/main/java/com/rest/webservices/restfulwebservices/RestfulWebServicesApplication.java	/home/app/src/main/java/com/rest/webservices/restfulwebservices/RestfulWebServicesApplication.java
 
 RUN mvn -f /home/app/pom.xml clean package
 
 COPY . /home/app
 RUN mvn -f /home/app/pom.xml clean package
 
-FROM openjdk:18.0-slim
+FROM eclipse-temurin:21-jre-alpine
 EXPOSE 5000
 COPY --from=build /home/app/target/*.jar app.jar
 ENTRYPOINT [ "sh", "-c", "java -jar /app.jar" ]
+
+
+docker container ls
+docker build -t in28min/hello-world-docker:v3 .
+docker image list
+docker container run -d -p 5000:5000 in28min/hello-world-docker:v3
+
+-Change in controller file
+docker build -t in28min/hello-world-docker:v4 .
+docker image list
+docker container run -d -p 5000:5000 in28min/hello-world-docker:v4
 
 
 
@@ -161,8 +172,12 @@ COPY --from=build /home/app/spring-hello-world-java-service/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
 
 
+##########=======================================Maven Plugin==========================================########
 
------------Other commands--------------------
+mvn spring-boot:build-image
+
+
+##########=======================================Other Commands==========================================########
 
 
 wsl -d Ubuntu
