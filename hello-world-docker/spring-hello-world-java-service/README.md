@@ -14,6 +14,8 @@ docker rm -f (docker ps -aq)
 #list all containers including stopped
 docker ps -a
 
+docker info
+
 
 ##########=========================Dockerfile - 1 - Creating Docker Images=========================##########
 FROM eclipse-temurin:21-jre-alpine
@@ -180,12 +182,7 @@ mvn spring-boot:build-image
 ##########=======================================Other Commands==========================================########
 
 
-wsl -d Ubuntu
-sudo apt update
-docker version
-docker info
-cd /mnt/c/workspace/17-11-2024/SpringFramework/springboot-currency-microservice/spring-hello-world-java-service
-mvn clean package spring-boot:build-image
-
 docker run -d -p 9411:9411 openzipkin/zipkin:2.23
 docker run -d -p 9411:9411 openzipkin/zipkin:latest
+
+http://localhost:9411/zipkin/
