@@ -4,19 +4,21 @@ import com.eazybytes.gatewayserver.handler.CustomerCompositeHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
-import org.springframework.web.reactive.function.server.RequestPredicates;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
-import org.springframework.web.reactive.function.server.ServerResponse;
+import org.springframework.web.reactive.function.server.*;
 
+/**
+ * proxyBeanMethods as false will improve startup performance
+ */
 @Configuration(proxyBeanMethods = false)
 public class CustomerCompositeRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> route(CustomerCompositeHandler customerCompositeHandler) {
+    public RouterFunction<ServerResponse> route(CustomerCompositeHandler customerCompositeHandler){
+
         return RouterFunctions.route(RequestPredicates.GET("/api/composite/fetchCustomerSummary")
                         .and(RequestPredicates.accept(MediaType.APPLICATION_JSON))
-                        .and(RequestPredicates.queryParam("mobileNumber", param -> true)),
-                customerCompositeHandler::fetchCustomerSummary);
+                        .and(RequestPredicates.queryParam("mobileNumber",param -> true))
+                ,customerCompositeHandler::fetchCustomerSummary );
+
     }
 }

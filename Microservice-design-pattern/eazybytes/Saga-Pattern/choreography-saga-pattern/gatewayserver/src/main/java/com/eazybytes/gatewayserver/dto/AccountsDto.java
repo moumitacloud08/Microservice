@@ -11,15 +11,14 @@ public class AccountsDto {
     @Pattern(regexp = "(^$|[0-9]{10})", message = "AccountNumber must be 10 digits")
     private Long accountNumber;
 
-    @Pattern(regexp = "(^$|[0-9]{10})", message = "Mobile number must be 10 digits")
+    @Pattern(regexp="(^$|[0-9]{10})", message = "Mobile Number must be 10 digit")
     private String mobileNumber;
 
     @NotEmpty(message = "AccountType can not be a null or empty")
     private String accountType;
 
-    @NotEmpty(message = "BranchAddress can not be a null or empty")
+    @NotEmpty(message = "Branch Address can not be a null or empty")
     private String branchAddress;
 
-    private boolean activeSw;
-
+    private boolean activeSW;
 }

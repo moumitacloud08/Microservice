@@ -1,5 +1,6 @@
 package com.eazybytes.customer.service.impl;
 
+import com.eazybytes.common.dto.MobileNumberUpdateDto;
 import com.eazybytes.customer.constants.CustomerConstants;
 import com.eazybytes.customer.dto.CustomerDto;
 import com.eazybytes.customer.entity.Customer;
@@ -9,15 +10,19 @@ import com.eazybytes.customer.mapper.CustomerMapper;
 import com.eazybytes.customer.repository.CustomerRepository;
 import com.eazybytes.customer.service.ICustomerService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CustomerServiceImpl implements ICustomerService {
 
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+    private final StreamBridge streamBridge;
 
     @Override
     public void createCustomer(CustomerDto customerDto) {
@@ -58,6 +63,23 @@ public class CustomerServiceImpl implements ICustomerService {
         customer.setActiveSw(CustomerConstants.IN_ACTIVE_SW);
         customerRepository.save(customer);
         return true;
+    }
+
+    @Override
+    public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
+        Customer customer = customerRepository.findByMobileNumberAndActiveSw(mobileNumberUpdateDto.getCurrentMobileNumber(), true).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumberUpdateDto.getCurrentMobileNumber())
+        );
+        customer.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
+        customerRepository.save(customer);
+        updateAccountMobileNumber(mobileNumberUpdateDto);
+        return true;
+    }
+
+    private void updateAccountMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
+        log.info("Sending updateAccountMobileNumber request for the detail: {}",mobileNumberUpdateDto);
+        var result = streamBridge.send("updateAccountMobileNumber-out-0",mobileNumberUpdateDto);
+        log.info("Is the updateAccountMobileNumber request successfully triggered?:{}",result);
     }
 
 }

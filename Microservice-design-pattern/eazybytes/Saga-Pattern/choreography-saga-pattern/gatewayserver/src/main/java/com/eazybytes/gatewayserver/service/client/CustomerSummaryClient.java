@@ -22,5 +22,4 @@ public interface CustomerSummaryClient {
 
     @GetExchange(value= "/eazybank/cards/api/fetch", accept = "application/json")
     Mono<ResponseEntity<CardsDto>> fetchCardDetails(@RequestParam("mobileNumber") String mobileNumber);
-
 }

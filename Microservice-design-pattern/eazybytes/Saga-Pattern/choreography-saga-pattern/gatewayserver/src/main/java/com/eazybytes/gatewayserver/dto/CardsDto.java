@@ -30,5 +30,4 @@ public class CardsDto {
     private int availableAmount;
 
     private boolean activeSw;
-
 }

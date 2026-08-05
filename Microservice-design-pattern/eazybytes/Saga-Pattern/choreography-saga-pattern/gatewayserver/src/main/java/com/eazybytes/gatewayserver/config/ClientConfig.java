@@ -15,7 +15,7 @@ public class ClientConfig {
     private String baseUrl;
 
     @Bean
-    CustomerSummaryClient customerClient() {
+    CustomerSummaryClient customerClient(){
         WebClient webClient = WebClient.builder().baseUrl(baseUrl).build();
         WebClientAdapter adapter = WebClientAdapter.create(webClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory.builderFor(adapter).build();

@@ -11,5 +11,4 @@ public class CustomerSummaryDto {
     private AccountsDto account;
     private LoansDto loan;
     private CardsDto card;
-
 }

@@ -1,5 +1,6 @@
 package com.eazybytes.customer.service;
 
+import com.eazybytes.common.dto.MobileNumberUpdateDto;
 import com.eazybytes.customer.dto.CustomerDto;
 
 public interface ICustomerService {
@@ -26,4 +27,10 @@ public interface ICustomerService {
      * @return boolean indicating if the delete of Customer details is successful or not
      */
     boolean deleteCustomer(String customerId);
+
+    /**
+     * @param mobileNumberUpdateDto - MobileNumberUpdateDto object
+     * @return boolean indicating if the update of mobile number is successful or not
+     */
+    public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto);
 }
