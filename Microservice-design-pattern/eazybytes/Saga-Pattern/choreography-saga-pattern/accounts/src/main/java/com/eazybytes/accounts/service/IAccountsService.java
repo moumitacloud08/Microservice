@@ -1,6 +1,7 @@
 package com.eazybytes.accounts.service;
 
 import com.eazybytes.accounts.dto.AccountsDto;
+import com.eazybytes.common.dto.MobileNumberUpdateDto;
 
 public interface IAccountsService {
 
@@ -31,5 +32,9 @@ public interface IAccountsService {
      */
     boolean deleteAccount(Long accountNumber);
 
-
+    /**
+     * @param mobileNumberUpdateDto - MobileNumberUpdateDto object
+     * @return boolean indicating if the update of mobile number is successful or not
+     */
+    public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto);
 }

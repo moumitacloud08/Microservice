@@ -8,7 +8,10 @@ import com.eazybytes.accounts.exception.ResourceNotFoundException;
 import com.eazybytes.accounts.mapper.AccountsMapper;
 import com.eazybytes.accounts.repository.AccountsRepository;
 import com.eazybytes.accounts.service.IAccountsService;
+import com.eazybytes.common.dto.MobileNumberUpdateDto;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,9 +19,11 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AccountsServiceImpl  implements IAccountsService {
 
-    private AccountsRepository accountsRepository;
+    private final AccountsRepository accountsRepository;
+    private final StreamBridge streamBridge;
 
     /**
      * @param mobileNumber - String
@@ -87,6 +92,23 @@ public class AccountsServiceImpl  implements IAccountsService {
         account.setActiveSw(AccountsConstants.IN_ACTIVE_SW);
         accountsRepository.save(account);
         return true;
+    }
+
+    @Override
+    public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
+        Accounts accounts = accountsRepository.findByMobileNumberAndActiveSw(mobileNumberUpdateDto.getCurrentMobileNumber(), true).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumberUpdateDto.getCurrentMobileNumber())
+        );
+        accounts.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
+        accountsRepository.save(accounts);
+        updateCardMobileNumber(mobileNumberUpdateDto);
+        return true;
+    }
+
+    private void updateCardMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
+        log.info("Sending updateCardMobileNumber request for the detail: {}",mobileNumberUpdateDto);
+        var result = streamBridge.send("updateCardMobileNumber-out-0",mobileNumberUpdateDto);
+        log.info("Is the updateCardMobileNumber request successfully triggered?:{}",result);
     }
 
 
