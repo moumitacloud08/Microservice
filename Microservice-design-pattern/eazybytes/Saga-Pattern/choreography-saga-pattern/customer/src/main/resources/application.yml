@@ -22,6 +22,11 @@ spring:
     username: guest
     password: guest
     connection-timeout: 10s
+  cloud:
+    stream:
+      bindings:
+        updateAccountMobileNumber-out-0:
+          destination: update-account-mobile-number
 
 eureka:
   instance:
