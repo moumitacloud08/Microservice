@@ -1,5 +1,6 @@
 package com.eazybytes.loans.service.impl;
 
+import com.eazybytes.common.dto.MobileNumberUpdateDto;
 import com.eazybytes.loans.constants.LoansConstants;
 import com.eazybytes.loans.dto.LoansDto;
 import com.eazybytes.loans.entity.Loans;
@@ -9,6 +10,8 @@ import com.eazybytes.loans.mapper.LoansMapper;
 import com.eazybytes.loans.repository.LoansRepository;
 import com.eazybytes.loans.service.ILoansService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,9 +19,11 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class LoansServiceImpl implements ILoansService {
 
-    private LoansRepository loansRepository;
+    private final LoansRepository loansRepository;
+    private final StreamBridge streamBridge;
 
     /**
      * @param mobileNumber - Mobile Number of the Customer
@@ -88,6 +93,23 @@ public class LoansServiceImpl implements ILoansService {
         loan.setActiveSw(LoansConstants.IN_ACTIVE_SW);
         loansRepository.save(loan);
         return true;
+    }
+
+    @Override
+    public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
+        Loans loans = loansRepository.findByMobileNumberAndActiveSw(mobileNumberUpdateDto.getCurrentMobileNumber(), true).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumberUpdateDto.getCurrentMobileNumber())
+        );
+        loans.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
+        loansRepository.save(loans);
+        updateMobileNumberStatus(mobileNumberUpdateDto);
+        return true;
+    }
+
+    private void updateMobileNumberStatus(MobileNumberUpdateDto mobileNumberUpdateDto){
+        log.info("Sending updateMobileNumberStatus request for the detail: {}",mobileNumberUpdateDto);
+        var result = streamBridge.send("updateMobileNumberStatus-out-0",mobileNumberUpdateDto);
+        log.info("Is the updateMobileNumberStatus request successfully triggered?:{}",result);
     }
 
 
