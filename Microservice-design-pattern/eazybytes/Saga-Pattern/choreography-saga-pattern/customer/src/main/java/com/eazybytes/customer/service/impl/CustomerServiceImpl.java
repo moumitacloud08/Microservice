@@ -85,4 +85,15 @@ public class CustomerServiceImpl implements ICustomerService {
         log.info("Is the updateAccountMobileNumber request successfully triggered?:{}",result);
     }
 
+    @Override
+    public boolean rollbackMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
+        String newMobileNumber = mobileNumberUpdateDto.getNewMobileNumber();
+        Customer customer = customerRepository.findByMobileNumberAndActiveSw(newMobileNumber, true).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber",newMobileNumber)
+        );
+        customer.setMobileNumber(mobileNumberUpdateDto.getCurrentMobileNumber());
+        customerRepository.save(customer);
+        return true;
+    }
+
 }
