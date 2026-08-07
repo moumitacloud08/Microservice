@@ -32,6 +32,8 @@ spring:
           group: ${spring.application.name}
         updateLoanMobileNumber-out-0:
           destination: update-loan-mobile-number
+        rollbackAccountMobileNumber-out-0:
+          destination: rollback-account-mobile-number
 
 eureka:
   instance:

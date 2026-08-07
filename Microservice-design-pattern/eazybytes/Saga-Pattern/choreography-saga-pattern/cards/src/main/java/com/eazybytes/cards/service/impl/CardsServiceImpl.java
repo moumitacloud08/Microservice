@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.util.Optional;
 import java.util.Random;
@@ -110,7 +111,9 @@ public class CardsServiceImpl implements ICardsService {
             updateLoanMobileNumber(mobileNumberUpdateDto);
             result = true;
         } catch (Exception exception) {
-
+            log.error("Error occurred while updating mobile number in Account",exception);
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            rollbackAccountMobileNumber(mobileNumberUpdateDto);
         }
 
         return result;
@@ -120,6 +123,12 @@ public class CardsServiceImpl implements ICardsService {
         log.info("Sending updateLoanMobileNumber request for the detail: {}",mobileNumberUpdateDto);
         var result = streamBridge.send("updateLoanMobileNumber-out-0",mobileNumberUpdateDto);
         log.info("Is the updateLoanMobileNumber request successfully triggered?:{}",result);
+    }
+
+    private void rollbackAccountMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
+        log.info("Sending rollbackAccountMobileNumber request for the detail: {}",mobileNumberUpdateDto);
+        var result = streamBridge.send("rollbackAccountMobileNumber-out-0",mobileNumberUpdateDto);
+        log.info("Is the rollbackAccountMobileNumber request successfully triggered?:{}",result);
     }
 
 
