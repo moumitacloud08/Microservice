@@ -74,9 +74,9 @@ public class CustomerServiceImpl implements ICustomerService {
         );
         customer.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
         customerRepository.save(customer);
-        throw new RuntimeException("Some Error happened while updating the mobile number"); //Testing purpose only
-        //updateAccountMobileNumber(mobileNumberUpdateDto);
-        //return true;
+        //throw new RuntimeException("Some Error happened while updating the mobile number"); //Testing purpose only
+        updateAccountMobileNumber(mobileNumberUpdateDto);
+        return true;
     }
 
     private void updateAccountMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
