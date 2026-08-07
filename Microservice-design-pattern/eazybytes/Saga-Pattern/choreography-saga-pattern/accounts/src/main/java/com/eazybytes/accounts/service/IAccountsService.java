@@ -37,4 +37,10 @@ public interface IAccountsService {
      * @return boolean indicating if the update of mobile number is successful or not
      */
     public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto);
+
+    /**
+     * @param mobileNumberUpdateDto - MobileNumberUpdateDto object
+     * @return boolean indicating if the update of mobile number is successful or not
+     */
+    public boolean rollbackMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto);
 }

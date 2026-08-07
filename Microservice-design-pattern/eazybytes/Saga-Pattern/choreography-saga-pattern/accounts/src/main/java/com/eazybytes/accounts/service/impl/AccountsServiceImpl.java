@@ -116,6 +116,8 @@ public class AccountsServiceImpl  implements IAccountsService {
         return result;
     }
 
+
+
     private void updateCardMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
         log.info("Sending updateCardMobileNumber request for the detail: {}",mobileNumberUpdateDto);
         var result = streamBridge.send("updateCardMobileNumber-out-0",mobileNumberUpdateDto);
@@ -126,6 +128,18 @@ public class AccountsServiceImpl  implements IAccountsService {
         log.info("Sending rollbackCustomerMobileNumber request for the detail: {}",mobileNumberUpdateDto);
         var result = streamBridge.send("rollbackCustomerMobileNumber-out-0",mobileNumberUpdateDto);
         log.info("Is the rollbackCustomerMobileNumber request successfully triggered?:{}",result);
+    }
+
+    @Override
+    public boolean rollbackMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
+        String newMobileNumber = mobileNumberUpdateDto.getNewMobileNumber();
+        Accounts accounts = accountsRepository.findByMobileNumberAndActiveSw(newMobileNumber, true).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber",newMobileNumber)
+        );
+        accounts.setMobileNumber(mobileNumberUpdateDto.getCurrentMobileNumber());
+        accountsRepository.save(accounts);
+        rollbackCustomerMobileNumber(mobileNumberUpdateDto);
+        return true;
     }
 
 
