@@ -9,6 +9,7 @@ import com.eazybytes.cards.mapper.CardsMapper;
 import com.eazybytes.cards.repository.CardsRepository;
 import com.eazybytes.cards.service.ICardsService;
 import com.eazybytes.common.dto.MobileNumberUpdateDto;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -96,14 +97,23 @@ public class CardsServiceImpl implements ICardsService {
     }
 
     @Override
+    @Transactional
     public boolean updateMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
-        Cards cards = cardsRepository.findByMobileNumberAndActiveSw(mobileNumberUpdateDto.getCurrentMobileNumber(), true).orElseThrow(
-                () -> new ResourceNotFoundException("Customer", "mobileNumber", mobileNumberUpdateDto.getCurrentMobileNumber())
-        );
-        cards.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
-        cardsRepository.save(cards);
-        updateLoanMobileNumber(mobileNumberUpdateDto);
-        return true;
+        boolean result = false;
+        try{
+            String currentMobileNumber = mobileNumberUpdateDto.getCurrentMobileNumber();
+            Cards cards = cardsRepository.findByMobileNumberAndActiveSw(currentMobileNumber, true).orElseThrow(
+                    () -> new ResourceNotFoundException("Customer", "mobileNumber", currentMobileNumber)
+            );
+            cards.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
+            cardsRepository.save(cards);
+            updateLoanMobileNumber(mobileNumberUpdateDto);
+            result = true;
+        } catch (Exception exception) {
+
+        }
+
+        return result;
     }
 
     private void updateLoanMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
