@@ -107,10 +107,11 @@ public class LoansServiceImpl implements ILoansService {
             );
             loans.setMobileNumber(mobileNumberUpdateDto.getNewMobileNumber());
             loansRepository.save(loans);
+            //throw new RuntimeException("Some Error Occurred while updating MobileNumber in Loan"); //Added for testing the rollback
             updateMobileNumberStatus(mobileNumberUpdateDto);
             result= true;
         }catch(Exception exception){
-            log.error("Error occurred while updating mobile number in Account",exception);
+            log.error("Error occurred while updating mobile number in Loan",exception);
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             rollbackCardMobileNumber(mobileNumberUpdateDto);
         }
