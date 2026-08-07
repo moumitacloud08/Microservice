@@ -16,6 +16,7 @@ import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import javax.smartcardio.Card;
 import java.util.Optional;
 import java.util.Random;
 
@@ -119,6 +120,8 @@ public class CardsServiceImpl implements ICardsService {
         return result;
     }
 
+
+
     private void updateLoanMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto){
         log.info("Sending updateLoanMobileNumber request for the detail: {}",mobileNumberUpdateDto);
         var result = streamBridge.send("updateLoanMobileNumber-out-0",mobileNumberUpdateDto);
@@ -129,6 +132,18 @@ public class CardsServiceImpl implements ICardsService {
         log.info("Sending rollbackAccountMobileNumber request for the detail: {}",mobileNumberUpdateDto);
         var result = streamBridge.send("rollbackAccountMobileNumber-out-0",mobileNumberUpdateDto);
         log.info("Is the rollbackAccountMobileNumber request successfully triggered?:{}",result);
+    }
+
+    @Override
+    public boolean rollbackMobileNumber(MobileNumberUpdateDto mobileNumberUpdateDto) {
+        String newMobileNumber = mobileNumberUpdateDto.getNewMobileNumber();
+        Cards cards = cardsRepository.findByMobileNumberAndActiveSw(newMobileNumber, true).orElseThrow(
+                () -> new ResourceNotFoundException("Customer", "mobileNumber",newMobileNumber)
+        );
+        cards.setMobileNumber(mobileNumberUpdateDto.getCurrentMobileNumber());
+        cardsRepository.save(cards);
+        rollbackAccountMobileNumber(mobileNumberUpdateDto);
+        return true;
     }
 
 

@@ -18,4 +18,12 @@ public class CardFunctions {
             iCardsService.updateMobileNumber(mobileNumberUpdateDto);
         };
     }
+
+    @Bean
+    public Consumer<MobileNumberUpdateDto> rollbackCardMobileNumber(ICardsService iCardsService){
+        return(mobileNumberUpdateDto) ->{
+            log.info("Received rollbackCardMobileNumber request for the details:{}",mobileNumberUpdateDto);
+            iCardsService.rollbackMobileNumber(mobileNumberUpdateDto);
+        };
+    }
 }
