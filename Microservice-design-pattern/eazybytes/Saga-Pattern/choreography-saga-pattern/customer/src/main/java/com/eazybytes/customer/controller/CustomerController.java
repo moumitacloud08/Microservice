@@ -78,6 +78,7 @@ public class CustomerController {
 
     @PatchMapping("/mobile-number")
     public ResponseEntity<ResponseDto>  updateMobileNumber(@RequestBody MobileNumberUpdateDto mobileNumberUpdateDto){
+        iCustomerService.updateMobileNumber(mobileNumberUpdateDto);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseDto(CustomerConstants.STATUS_200,CustomerConstants.MESSAGE_200));
     }
