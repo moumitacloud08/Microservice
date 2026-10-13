@@ -46,6 +46,8 @@ docker run -d --name axonserver \
     axoniq/axonserver
 ```
 
+docker run -d --name axonserver -p 8024:8024 -p 8124:8124 -v "C:\Users\moumi\OneDrive\Desktop\axonserver\data":/axonserver/data -v "C:\Users\moumi\OneDrive\Desktop\axonserver\events":/axonserver/events -v "C:\Users\moumi\OneDrive\Desktop\axonserver\config":/axonserver/config axoniq/axonserver
+
 **Explanation of the Docker Command**
 
 - `-d`: Runs the container in detached mode (in the background).
