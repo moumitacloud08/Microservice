@@ -8,7 +8,12 @@ spring:
     config:
       server:
         native:
-          search-locations: "classpath:/config"
+          #search-locations: "classpath:/config" #store the properties files in classpath (resource folder)
+          search-locations: "file:///C:/Users/moumi/OneDrive/Documents/config" #store the properties files in file system
 
 server:
   port: 8071
+
+logging:
+  pattern:
+    console:  ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}

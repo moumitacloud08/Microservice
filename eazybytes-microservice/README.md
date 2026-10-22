@@ -183,3 +183,4 @@ cloudconfig : 8071
 - Reading configuration from the class path
 - Important Links 
    - http://localhost:8071/accounts/prod
+   - http://localhost:8071/loans/prod
