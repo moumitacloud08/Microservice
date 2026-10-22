@@ -184,3 +184,10 @@ cloudconfig : 8071
 - Important Links 
    - http://localhost:8071/accounts/prod
    - http://localhost:8071/loans/prod
+   
+## SECTION 8##
+- Important Links
+   - http://localhost:8071/eurekaserver/prod
+   - Eureka Dashboard 
+      - http://localhost:8070/
+   
