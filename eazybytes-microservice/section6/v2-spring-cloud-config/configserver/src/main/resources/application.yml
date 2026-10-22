@@ -3,7 +3,8 @@ spring:
   application:
     name: "configserver"
   profiles:
-    active: native
+    #active: native  # To load properties from classpath or file system under cloud/config/server
+    active: git      #To load properties from git under cloud/config/server
   cloud:
     config:
       server:
@@ -11,8 +12,9 @@ spring:
           #search-locations: "classpath:/config" #store the properties files in classpath (resource folder)
           #search-locations: "file:///C:/Users/moumi/OneDrive/Documents/config" #store the properties files in file system
         git:
-          uri: ""
+          uri: "https://github.com/moumitacloud08/Microservice.git"   #From the author https://github.com/eazybytes/eazybytes-config.git
           default-label: main
+          search-paths: configuration/eazybytes-config # Not required for author's git repo link
           timeout: 5
           clone-on-start: true
           force-pull: true
