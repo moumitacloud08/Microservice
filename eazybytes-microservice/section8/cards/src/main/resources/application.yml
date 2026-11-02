@@ -27,6 +27,28 @@ management:
     web:
       exposure:
         include: "*"
+  endpoint:
+    shutdown:
+      access: unrestricted # To access the shutdown URL without any restriction
+  info:
+    env:
+      enabled: true # Tell actuator to start exposing the info related properties defined below
+
+
+eureka:
+  instance:
+    preferIpAddress: true # Register with IP address as in local there is no DNS setup
+  client:
+    fetchRegistry: true # accounts fetches registry details when it needs to talk to other microservices
+    registerWithEureka: true # to register itself with Eureka server
+    serviceUrl:
+      defaultZone: http://localhost:8070/eureka/
+
+info:
+  app:
+    name: "cards"
+    description: "Eazy Bank Cards Application"
+    version: "1.0.0"
 
 logging:
   pattern:

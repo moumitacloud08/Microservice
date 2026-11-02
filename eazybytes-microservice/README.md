@@ -190,4 +190,6 @@ cloudconfig : 8071
    - http://localhost:8071/eurekaserver/prod
    - Eureka Dashboard 
       - http://localhost:8070/
+   - Eureka Links
+      - http://localhost:8070/eureka/apps
    
