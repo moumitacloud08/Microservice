@@ -23,7 +23,7 @@ spring:
   http:
     serviceclient:
       loans:
-        base-url: lb://loans
+        base-url: lb://loans  #Load Balancer
       cards:
         base-url: lb://cards
 
