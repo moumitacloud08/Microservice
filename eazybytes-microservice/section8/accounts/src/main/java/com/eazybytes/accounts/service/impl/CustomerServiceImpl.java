@@ -14,10 +14,12 @@ import com.eazybytes.accounts.repository.CustomerRepository;
 import com.eazybytes.accounts.service.ICustomerService;
 import com.eazybytes.accounts.service.client.CardsClient;
 import com.eazybytes.accounts.service.client.LoansClient;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class CustomerServiceImpl implements ICustomerService {
 
     private AccountsRepository accountsRepository;
