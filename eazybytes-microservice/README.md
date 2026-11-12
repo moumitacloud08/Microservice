@@ -194,4 +194,10 @@ cloudconfig : 8071
       - http://localhost:8070/eureka/apps
    - Shutdown [accounts]
       - http://localhost:8080/actuator/shutdown [POST]
+	  
+## SECTION 9##
+- Important Links
+   - http://localhost:8072/actuator
+   - http://localhost:8072/actuator/gateway/routes
+   
    

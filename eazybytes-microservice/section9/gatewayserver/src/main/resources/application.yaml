@@ -9,7 +9,7 @@ spring:
         webflux:
           discovery:
             locator:
-              enabled: false  #Telling the Gateway that connect with discovery agent Eureka,
+              enabled: true  #Telling the Gateway that connect with discovery agent Eureka,
                                #locate all the details regarding microservices and use that info
                                #to automatically forward the traffic from external client to right service
 management:
