@@ -199,5 +199,8 @@ cloudconfig : 8071
 - Important Links
    - http://localhost:8072/actuator
    - http://localhost:8072/actuator/gateway/routes
+   - http://localhost:8072/eazybank/accounts/api/create
+   - http://localhost:8072/eazybank/loans/api/create
+   - http://localhost:8072/eazybank/cards/api/create
    
    
